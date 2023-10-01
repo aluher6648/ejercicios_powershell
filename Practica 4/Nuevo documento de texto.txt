@@ -1,0 +1,57 @@
+ejercicio 8
+[int]$alture = Read-Host "Escribe un número"
+
+for ($i=1; $i -le $alture; $i++) {
+    for($j = ($i*2)-1; $j -ge 1; $j=$j-2) {
+        Write-Host -NoNewline "$j"
+    }
+    Write-Host ""
+}
+
+ejercicio 7
+﻿[int]$alture = Read-Host "Escribe un número"
+
+for ($fila=1; $fila -le $alture; $fila++) 
+	{Write-Host "" for ($col=1; $col -le $fila; $col++) 
+	{Write-Host -NoNewline "*"}}
+
+------------------------------------------------
+ejercicio 8
+﻿#piramide
+Clear-Host
+
+[int]$nombre = Read-Host "Quina altura vols al triangle?"
+
+for ( $i=1; $i -le $nombre; $i++ ){    Write-Host ""   
+ for ( $j=1;$j -le $i; $j++ ){        write-host -NoNewline "$j "    }
+}
+
+ejercico 7
+[int]$nombre = Read-Host "Quina altura vols al triangle?"
+
+for ( $i=1; $i -le $nombre; $i++ ){    Write-Host ""    for ( $j=1;$j -le $i; $j++ ){        write-host -NoNewline "$j "    }}
+
+
+-.-.-.-.-.--.-.-.-.-.-.-.-.-.-.-.--..-.-.
+PABLO 7
+
+[int] $num = Read-Host "Introduce un número entero"
+
+for ($fila = 1; $fila -le $num; $fila++){
+	for ($columna = 1; $columna -le $fila; $columna++){
+		Write-Host -NoNewLine "*"
+	}
+	Write-Host ""
+}
+
+
+pablo 8
+
+[int] $num = Read-Host "Introduce un número entero"
+
+for ($fila = 1; $fila -le $num; $fila++) {
+    for ($columna = (2 * $fila - 1); $columna -ge 1; $columna -= 2) {
+        Write-Host -NoNewline "$columna "
+    }
+    Write-Host ""
+}
