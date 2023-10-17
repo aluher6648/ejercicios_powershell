@@ -24,5 +24,5 @@ foreach($empleado in $empleados)
   $apellido =$empleado.apellido
    
     New-ADUser -Name "$nombre" -Path "OU=$departem,OU=EMPRESA,DC=EMPRESA,DC=LOCAL" -SamAccountName "$nombre" -UserPrincipalName "$nombre.$apellido@empresa.local" -AccountPassword (ConvertTo-SecureString "aso2021." -AsPlainText -Force) -GivenName "$nombre" -Surname "$apellido" -ChangePasswordAtLogon $true -Enabled $true 
-
+    Add-ADGroupMember -Identity $departem -Members $nombre
     }
