@@ -22,7 +22,7 @@ foreach($departamento in $departamentos) #lee dentro de departamentos.csv
 
    
    # Da permisos y accesos a las carpetas.
-   New-SmbShare -Path "$CarpetaDEP" -Name "$depart" -ChangeAccess "$depart" -FullAccess Administradores -ReadAccess "Usuarios del domino"
+   New-SmbShare -Path "$CarpetaDEP" -Name "$depart" -ChangeAccess "$depart" -FullAccess Administradores -ReadAccess "Usuarios del dominio"
 
 }
  ### ACL Y  ACE DE UNIDOADES COMARTIDAS ###
@@ -49,30 +49,30 @@ foreach ($departamento in $departamentos)
 
 #permisos de modificar para cada departamnto
  $acl2 = Get-Acl -Path C:\EMPRESA\$departamento
- $permisosDEP = '$departamento','Modify','ContainerInherit,ObjectInherit','None','Allow'
+ $permisosDEP = $departamento,'Modify','ContainerInherit,ObjectInherit','None','Allow'
  $aceDEP = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisosDEP
  $acl2.SetAccessRule($aceDEP)
 
 }
 
 
-foreach ($otrodepartamento in $departamentos)
-{
-if ($otrodepartamento -ne $departamento)
+foreach ($otrodepartamento in $departamentos){
+
+if ($otrodepartamento -ne $departamento){
  
 #permisos para leer otros departamentos 
  $acl3 = Get-Acl -Path C:\EMPRESA\$otrodepartamento
- $permisosODEP = '$otrodepartamento','Read','ContainerInherit,ObjectInherit','None','Allow'
- $aceDEP = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisosDEP
- $acl3.SetAccessRule($aceDEP)
-
-}
-
-    
+ $permisosODEP = $otrodepartamento,'Read','ContainerInherit,ObjectInherit','None','Allow'
+ $aceODEP = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisosODEP
+ $acl3.SetAccessRule($aceODEP)
+ }
+}   
 
 
-#Establecer los pèrmisos
-####$acl | Set-Acl -Path C:\EMPRESA### Solo descomentar para realizar el comando grabar todo
+#Establecer los pèrmisos (Solo descomentar para realizar el comando grabar todo)
+#Set-Acl -Path C:\EMPRESA  -AclObject $acl1
+#Set-Acl -Path C:\EMPRESA\$departamento -AclObject $acl2
+#Set-Acl -Path C:\EMPRESA\$otrodepartamento -AclObject $acl3
 
 #Muestra por pantalla lo que modifica 
 $ace | Format-Table
