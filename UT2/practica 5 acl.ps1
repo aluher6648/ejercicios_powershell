@@ -4,10 +4,9 @@
 $departamentos =Import-Csv departamentos.csv -Delimiter ";"
 $carpetaEMP = "C:\EMPRESA"
 
-
 # Creacion carpeta empresa y  permisos de la misma
 New-Item -Path $carpetaEMP -ItemType Directory
-New-SmbShare -Path $carpetaEMP -Name EMPRESA  -ReadAccess "Usuarios de dominio" 
+### New-SmbShare -Path $carpetaEMP -Name EMPRESA  -ReadAccess "Usuarios del dominio" ### solo administradores podrian entrar 
 
 # Crear la estructura de carpetas
 foreach($departamento in $departamentos) #lee dentro de departamentos.csv 
@@ -38,7 +37,7 @@ $acl1.SetAccessRuleProtection($true,$false)
 $permisosADMIN = 'Administradores','FullControl','ContainerInherit,ObjectInherit','None','Allow'
 $aceADMIN = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisosADMIN    
 $acl1.SetAccessRule($aceADMIN)
-
+Set-Acl -Path C:\EMPRESA  -AclObject $acl1
 
 ## DEPARTAMENTOS##
 
@@ -48,32 +47,38 @@ foreach ($departamento in $departamentos)
 {
 
 #permisos de modificar para cada departamnto
- $acl2 = Get-Acl -Path C:\EMPRESA\$departamento
- $permisosDEP = $departamento,'Modify','ContainerInherit,ObjectInherit','None','Allow'
+$dep = $departamento.departamento
+ $acl2 = Get-Acl -Path C:\EMPRESA\$dep
+ $permisosDEP = $dep,'Modify','ContainerInherit,ObjectInherit','None','Allow'
  $aceDEP = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisosDEP
  $acl2.SetAccessRule($aceDEP)
+ Set-Acl -Path C:\EMPRESA\$dep -AclObject $acl2
 
+
+ $acl3 = Get-Acl -Path C:\EMPRESA\$dep
+ $permisosOU = "Usuarios del dominio",'Read','ContainerInherit,ObjectInherit','None','Allow'
+ $aceOU = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisosOU
+ $acl3.SetAccessRule($aceOU)
+ Set-Acl -Path C:\EMPRESA\$dep -AclObject $acl3
 }
 
 
-foreach ($otrodepartamento in $departamentos){
+####foreach ($otrodepartamento in $departamentos){  ### hace lo mismo de acl3 pero si hay muchos el sistema se relentiza por el tipo de bucle
 
-if ($otrodepartamento -ne $departamento){
+#if ($otrodepartamento -ne $departamento){
  
 #permisos para leer otros departamentos 
- $acl3 = Get-Acl -Path C:\EMPRESA\$otrodepartamento
- $permisosODEP = $otrodepartamento,'Read','ContainerInherit,ObjectInherit','None','Allow'
- $aceODEP = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisosODEP
- $acl3.SetAccessRule($aceODEP)
- }
-}   
+ #$acl4 = Get-Acl -Path C:\EMPRESA\$otrodepartamento
+ #$permisosODEP = $otrode-partamento,'Read','ContainerInherit,ObjectInherit','None','Allow'
+ #$aceODEP = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisosODEP
+ #$acl4.SetAccessRule($aceODEP)
+ #}
+#}   
 
 
 #Establecer los pèrmisos (Solo descomentar para realizar el comando grabar todo)
 #Set-Acl -Path C:\EMPRESA  -AclObject $acl1
 #Set-Acl -Path C:\EMPRESA\$departamento -AclObject $acl2
-#Set-Acl -Path C:\EMPRESA\$otrodepartamento -AclObject $acl3
+#Set-Acl -Path C:\EMPRESA\"usuarios del dominio" -AclObject $acl3
 
-#Muestra por pantalla lo que modifica 
-$ace | Format-Table
 
