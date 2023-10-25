@@ -6,7 +6,7 @@ $carpetaEMP = "C:\EMPRESA"
 
 # Creacion carpeta empresa y  permisos de la misma
 New-Item -Path $carpetaEMP -ItemType Directory
-### New-SmbShare -Path $carpetaEMP -Name EMPRESA  -ReadAccess "Usuarios del dominio" ### solo administradores podrian entrar 
+#New-SmbShare -Path $carpetaEMP -Name EMPRESA  -ReadAccess "Usuarios del dominio"  
 
 # Crear la estructura de carpetas
 foreach($departamento in $departamentos) #lee dentro de departamentos.csv 
@@ -61,24 +61,5 @@ $dep = $departamento.departamento
  $acl3.SetAccessRule($aceOU)
  Set-Acl -Path C:\EMPRESA\$dep -AclObject $acl3
 }
-
-
-####foreach ($otrodepartamento in $departamentos){  ### hace lo mismo de acl3 pero si hay muchos el sistema se relentiza por el tipo de bucle
-
-#if ($otrodepartamento -ne $departamento){
- 
-#permisos para leer otros departamentos 
- #$acl4 = Get-Acl -Path C:\EMPRESA\$otrodepartamento
- #$permisosODEP = $otrode-partamento,'Read','ContainerInherit,ObjectInherit','None','Allow'
- #$aceODEP = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisosODEP
- #$acl4.SetAccessRule($aceODEP)
- #}
-#}   
-
-
-#Establecer los pèrmisos (Solo descomentar para realizar el comando grabar todo)
-#Set-Acl -Path C:\EMPRESA  -AclObject $acl1
-#Set-Acl -Path C:\EMPRESA\$departamento -AclObject $acl2
-#Set-Acl -Path C:\EMPRESA\"usuarios del dominio" -AclObject $acl3
 
 
