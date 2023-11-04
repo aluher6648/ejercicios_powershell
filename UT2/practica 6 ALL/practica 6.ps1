@@ -1,5 +1,4 @@
-﻿﻿
-$empleados =Import-Csv empleados.csv -Delimiter ";"
+﻿$empleados =Import-Csv empleados.csv -Delimiter ";"
 $carpetaEMP_u = "C:\EMPRESA_users"
 
 # Creacion carpeta empresa y  permisos de la misma
@@ -55,6 +54,7 @@ foreach ($empleado in $empleados)
 
 
  $acl3 = Get-Acl -Path C:\EMPRESA_users
+ $acl4 = Get-Acl -Path C:\EMPRESA_users\$usuario
 
 #Deshabilitar la herencia y eliminar TODAS las reglas de acceso
 $acl3.SetAccessRuleProtection($true,$false)
@@ -65,6 +65,11 @@ $aceADMIN = New-Object -TypeName System.Security.AccessControl.FileSystemAccessR
 $acl3.SetAccessRule($aceADMIN)
 Set-Acl -Path C:\EMPRESA_users\$usuario  -AclObject $acl3
 
+#Añadir al a cada usuario permiso total a su carpeta personal
+$permisoCP = $empleado.nombre,'FullControl','ContainerInherit,ObjectInherit','None','Allow'
+$aceCP = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permisoCP    
+$acl4.SetAccessRule($aceCP)
+Set-Acl -Path C:\EMPRESA_users\$usuario  -AclObject $acl4
 
  # Configura el script de inicio y la unidad de red principal para el usuario
   $dep_bat = $empleados.departamento
