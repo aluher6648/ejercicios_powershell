@@ -71,8 +71,12 @@ $aceCP = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule
 $acl4.SetAccessRule($aceCP)
 Set-Acl -Path C:\EMPRESA_users\$usuario  -AclObject $acl4
 
+ 
  # Configura el script de inicio y la unidad de red principal para el usuario
-  $dep_bat = $empleados.departamento
-   Set-ADUser -Identity $empleado.nombre -ScriptPath "carpetas$dep_bat.bat" -HomeDrive "Z:" -HomeDirectory "\\EMPRESA-dc1\Empresa_users$\$cuenta"
+  $dep_bat = $empleado.departamento
+   Set-ADUser -Identity $empleado.nombre -ScriptPath "$dep_bat.bat" -HomeDrive "Z:" -HomeDirectory "\\EMPRESA-dc1\Empresa_users$\$cuenta"
 
 }
+
+
+
